@@ -12,13 +12,20 @@ public class Main{
         int h = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        if(m < 45) {
+        // 1. if else 문
+
+        /*if(m < 45) {
             h--;
             m = 60 - (45 - m);
         }
         else{
             m -= 45;
-        }
+        }*/
+
+        // 2. 삼항 연산자 이용
+
+        h = (m < 45) ? h-- : h;
+        m = (m < 45) ? 60 - (45 - m) : m - 45; // 여기서 참 일때, m + 15도 가능
 
         sb.append((h + 24) % 24).append(" ").append(m);
 
