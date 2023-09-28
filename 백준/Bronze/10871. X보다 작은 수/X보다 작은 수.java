@@ -13,13 +13,13 @@ public class Main {
         int X = Integer.parseInt(st.nextToken());
 
         st = new StringTokenizer(br.readLine(), " ");
-        int[] nums = new int[N];
         StringBuilder sb = new StringBuilder();
 
+        int num = 0;
         for (int i = 0; i < N; i++) {
-            nums[i] = Integer.parseInt(st.nextToken());
+            num = Integer.parseInt(st.nextToken());
 
-            if (nums[i] < X) sb.append(nums[i]).append(' ');
+            if (num < X) sb.append(num).append(' ');
         }
 
         System.out.println(sb);
