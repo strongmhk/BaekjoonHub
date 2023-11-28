@@ -43,8 +43,8 @@ public class Main {
 
         for (int v : tree.get(node)) {
             if (!visited[v]) {
-                dfs(v);
-                parents[v]=node;
+                dfs(v); // 재귀호출
+                parents[v]=node; 
                 
             }
         }
