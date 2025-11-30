@@ -6,7 +6,7 @@ class Main {
     static int N, M, answer = 0;
     static int[] visit;
 
-    public void DFS(int v) {
+    static void DFS(int v) {
         if(v == N) return answer++;
         for(int i = 1; i <= N; i++) {
             if(graph[v][i] == 1 && visit[i] == 0) {
