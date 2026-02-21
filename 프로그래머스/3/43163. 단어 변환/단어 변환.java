@@ -1,11 +1,11 @@
 import java.util.*;
 
 class Distance {
-    public int index;
+    public String word;
     public int dis;
     
-    public Distance(int index, int dis) {
-        this.index = index;
+    public Distance(String word, int dis) {
+        this.word = word;
         this.dis = dis;
     }
 }
@@ -15,70 +15,46 @@ class Solution {
     
     public int solution(String begin, String target, String[] words) {
         int answer = 0;
-        int n = words.length;
         
-        visited = new boolean[n];
-        
-        answer = BFS(words, begin, target);
+        answer = BFS(begin, target, words);
         
         return answer;
     }
     
-    static int BFS(String[] words, String begin, String target) {
+    static int BFS(String begin, String target, String[] words) {
+        int n = words.length;
+        
         Queue<Distance> queue = new LinkedList<>();
+        visited = new boolean[n];
         
-        int[] nextWordIdx = getNextWordIdx(words, begin);
+        queue.offer(new Distance(begin, 0));
         
-        for (int idx : nextWordIdx) {
-            if (words[idx].equals(target)) return 1;
-            queue.offer(new Distance(idx, 1));
-            visited[idx] = true;
-        }
-        
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             Distance cur = queue.poll();
             
-            nextWordIdx = getNextWordIdx(words, words[cur.index]);
-            
-            for (int idx : nextWordIdx) {
-                if (visited[idx] == true) continue;
-                if (words[idx].equals(target)) return cur.dis + 1;
+            for (int i = 0; i < n; i++) {
+                if (visited[i] == true || isNext(cur.word, words[i]) == false) continue;
                 
-                queue.offer(new Distance(idx, cur.dis + 1));
-                visited[idx] = true;
+                if (words[i].equals(target)) return cur.dis + 1;
+                
+                queue.offer(new Distance(words[i], cur.dis + 1));
+                visited[i] = true;
             }
         }
         
         return 0;
     }
     
-    // words에서 변환 가능한 단어의 인덱스를 리턴
-    static int[] getNextWordIdx(String[] words, String targetWord) {
-        List<Integer> list = new ArrayList<>();
+    static boolean isNext(String curWord, String nextWord) {
+        int count = 0;
+        int len = curWord.length();
         
-        for (int i = 0; i < words.length; i++) {
-            // 1글자만 차이나면 포함
-            int count = 0;
-            String word = words[i];
-            
-            char[] c1 = word.toCharArray();
-            char[] c2 = targetWord.toCharArray();
-            
-            for (int j = 0; j < c1.length; j++) {
-                if (c1[j] == c2[j]) count++;
-            }
-            
-            if (count == (word.length() - 1)) list.add(i);
+        for (int i = 0; i < len; i++) {
+            if (curWord.charAt(i) == nextWord.charAt(i)) count++;
         }
         
-        int[] result = new int[list.size()];
+        if (count == (len - 1)) return true;
         
-        for (int i = 0; i < list.size(); i++) {
-            result[i] = list.get(i);
-        }
-        
-        return result;  
+        return false;
     }
 }
-
-
