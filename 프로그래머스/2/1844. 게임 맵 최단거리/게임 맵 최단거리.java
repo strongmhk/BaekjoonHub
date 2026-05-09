@@ -1,52 +1,40 @@
 import java.util.*;
 
-class Point {
-    int x, y, dis;
-    
-    public Point(int x, int y, int dis) {
-        this.x = x;
-        this.y = y;
-        this.dis = dis;
-    }
-}
-
 class Solution {
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-
     public int solution(int[][] maps) {
-        int answer = 0;
-        
-        int m = maps.length;
-        int n = maps[0].length;
-        
-        answer = BFS(maps, m, n);
-        
-        return answer;
+        return BFS(maps, maps.length, maps[0].length);
     }
-    
-    static int BFS(int[][] maps, int m, int n) {
-        Queue<Point> queue = new LinkedList<>();
-        
-        queue.offer(new Point(0, 0, 1));
-        maps[0][0] = 1;
-        
+
+    static int BFS(int[][] maps, int n, int m) {
+        // 큐에 {x좌표, y좌표, 이동거리} 형태의 배열을 넣기
+        boolean[][] visited = new boolean[n][m];
+        Queue<int[]> queue = new LinkedList<>();
+        int[] dx = {-1, 0, 1, 0}; // 상, 우, 하, 좌
+        int[] dy = {0, 1, 0, -1};
+        int result = -1;
+
+        // 시작 좌표 큐에 넣고 방문 처리
+        queue.offer(new int[]{0, 0, 1});
+        visited[0][0] = true;
+
         while(!queue.isEmpty()) {
-            Point cur = queue.poll();
-            
+            int[] cur = queue.poll();
+            int x = cur[0], y = cur[1], dis = cur[2];
+
+            if (x == n - 1 && y == m - 1) return dis;
+
             for (int i = 0; i < 4; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                
-                if (nx < 0 || nx >= m || ny < 0 || ny >= n) continue;
-                if (maps[nx][ny] == 0) continue;
-                if (nx == (m - 1) && ny == (n - 1)) return cur.dis + 1;
-                
-                queue.offer(new Point(nx, ny, cur.dis + 1));
-                maps[nx][ny] = 0;
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+                if (maps[nx][ny] == 0 || visited[nx][ny] == true) continue;
+
+                queue.offer(new int[]{nx, ny, dis + 1});
+                visited[nx][ny] = true;
             }
         }
-        
+
         return -1;
     }
 }
