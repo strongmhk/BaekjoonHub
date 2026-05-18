@@ -2,14 +2,11 @@ import java.util.*;
 
 class Solution {
     static boolean[] visited;
-    static Set<Integer> set = new HashSet<>();
+    static HashSet<Integer> set = new HashSet<>();
     
     public int solution(String numbers) {
-        int n = numbers.length();
-        visited = new boolean[n];
-        
+        visited = new boolean[numbers.length()];
         DFS(numbers, "");
-        
         return set.size();
     }
     
