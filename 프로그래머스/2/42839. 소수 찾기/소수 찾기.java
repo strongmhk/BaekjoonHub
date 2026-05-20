@@ -6,28 +6,27 @@ class Solution {
     
     public int solution(String numbers) {
         visited = new boolean[numbers.length()];
-        DFS(numbers, "");
+        DFS(numbers, "", 0);
         return set.size();
     }
     
-    static void DFS(String numbers, String current) {
+    static void DFS(String numbers, String current, int depth) {
         if (current.length() > 0) {
             int num = Integer.parseInt(current);
             if (isPrime(num)) set.add(num);
-        }
+        } 
         
         for (int i = 0; i < numbers.length(); i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                DFS(numbers, current + numbers.charAt(i));
-                visited[i] = false; // 백트래킹
+                DFS(numbers, current + numbers.charAt(i), depth + 1);
+                visited[i] = false;
             }
         }
     }
     
     static boolean isPrime(int num) {
         if (num < 2) return false;
-        
         for (int i = 2; i * i <= num; i++) {
             if (num % i == 0) return false;
         }
