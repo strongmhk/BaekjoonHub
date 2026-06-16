@@ -1,17 +1,17 @@
 import java.util.*;
 
 class Solution {
-    static boolean[] visited;
     static HashSet<Integer> set = new HashSet<>();
     
     public int solution(String numbers) {
-        visited = new boolean[numbers.length()];
-        DFS(numbers, "", 0);
+        boolean[] visited = new boolean[numbers.length()];
+        DFS(numbers, "", visited);
+        
         return set.size();
     }
     
-    static void DFS(String numbers, String current, int depth) {
-        if (current.length() > 0) {
+    static void DFS(String numbers, String current, boolean[] visited) {
+        if (current.length() >= 1) {
             int num = Integer.parseInt(current);
             if (isPrime(num)) set.add(num);
         } 
@@ -19,7 +19,7 @@ class Solution {
         for (int i = 0; i < numbers.length(); i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                DFS(numbers, current + numbers.charAt(i), depth + 1);
+                DFS(numbers, current + numbers.charAt(i), visited);
                 visited[i] = false;
             }
         }
