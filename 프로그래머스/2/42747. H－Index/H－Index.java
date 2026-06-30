@@ -6,7 +6,7 @@ class Solution {
 		Arrays.sort(citations);
 		
 		for (int i = 0; i < citations.length; i++) {
-			int h = citations.length - i; // h번이상 인용된 논문의 수
+			int h = citations.length - i;
 			
 			if (citations[i] >= h) {
 				answer = h;
