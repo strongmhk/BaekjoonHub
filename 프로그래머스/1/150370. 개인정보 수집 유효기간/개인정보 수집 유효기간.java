@@ -1,39 +1,67 @@
 import java.util.*;
 
-class Solution {
+class CustomDate {
+    int year, month, day;
+    
+    public CustomDate(int year, int month, int day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+}
 
+class Solution {
     public int[] solution(String today, String[] terms, String[] privacies) {
-        ArrayList<Integer> answer = new ArrayList<>();
-        HashMap<String, Integer> termMap = new HashMap<>();
+        Map<String, Integer> termsMap = new HashMap<>();
+        List<Integer> expiredPrivacies = new ArrayList<>();
+        StringTokenizer st;
         
-        for (String term : terms) {
-            String[] split = term.split(" ");
-            termMap.put(split[0], Integer.parseInt(split[1]));
+        // 유효기간 map 저장
+        for (String t : terms) {
+            st = new StringTokenizer(t, " ");
+            String term = st.nextToken();
+            int month = Integer.parseInt(st.nextToken());
+            
+            termsMap.put(term, month);
         }
         
+        CustomDate todayDate = toCustomDate(today);
+        
+        // 개인정보별 파기여부 판단
         for (int i = 0; i < privacies.length; i++) {
-            String[] split = privacies[i].split(" ");
-            String collectDate = split[0];
-            String type = split[1];
+            st = new StringTokenizer(privacies[i], " ");
+            String strCollectDate = st.nextToken();
+            String term = st.nextToken();
             
-            int period = termMap.get(type);
+            // 유효한 기간과 현재 날짜를 표준화하여 비교
+            CustomDate collectDate = toCustomDate(strCollectDate);
+            int validMonth = termsMap.get(term);
+            int validVal = normalize(collectDate.year, collectDate.month, collectDate.day) + (validMonth * 28 - 1);
+            int todayVal = normalize(todayDate.year, todayDate.month, todayDate.day);
             
-            int collectDays = toDays(collectDate);
-            int validDays = collectDays + period * 28;
-            int todayDays = toDays(today);
-            
-            if (todayDays >= validDays) answer.add(i + 1);
+            if (todayVal > validVal) expiredPrivacies.add(i + 1);
         }
         
-        return answer.stream().mapToInt(i -> i).toArray();
+        int[] result = new int[expiredPrivacies.size()];
+        
+        for (int i = 0; i < expiredPrivacies.size(); i++) {
+            result[i] = expiredPrivacies.get(i);
+        }
+        
+        return result;
     }
     
-    static int toDays(String date) {
-        String[] split = date.split("\\.");
-        int year = Integer.parseInt(split[0]);
-        int month = Integer.parseInt(split[1]);
-        int day = Integer.parseInt(split[2]);
+    static CustomDate toCustomDate(String strDate) {
+        StringTokenizer st = new StringTokenizer(strDate, ".");
         
-        return year * 12 * 28 + month * 28 + day;
+        int year = Integer.parseInt(st.nextToken());
+        int month = Integer.parseInt(st.nextToken());
+        int day = Integer.parseInt(st.nextToken());
+        
+        return new CustomDate(year, month, day);
+    }
+    
+    static int normalize(int year, int month, int day) {
+        return (year * 12 * 28) + (month - 1) * 28 + (day - 1);
     }
 }
