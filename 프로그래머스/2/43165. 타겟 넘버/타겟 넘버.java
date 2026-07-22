@@ -1,19 +1,18 @@
 class Solution {
-    static int answer = 0;
+    static int result = 0;
     
     public int solution(int[] numbers, int target) {
-        DFS(numbers, target, 0, 0);
-        
-        return answer;
+        dfs(0, 0, target, numbers);
+        return result;
     }
     
-    static void DFS(int[] numbers, int target, int i, int num) {
+    static void dfs(int num, int i, int target, int[] numbers) {
         if (i == numbers.length) {
-            if (num == target) answer++;
+            if (num == target) result++;
             return;
         } 
         
-        DFS(numbers, target, i + 1, num + numbers[i]);
-        DFS(numbers, target, i + 1, num - numbers[i]);
+        dfs(num + numbers[i], i + 1, target, numbers);
+        dfs(num - numbers[i], i + 1, target, numbers);
     }
 }
