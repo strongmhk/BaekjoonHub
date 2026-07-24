@@ -1,26 +1,24 @@
 class Solution {
-    static int max = 0;
     static boolean[] visited;
-
+    static int result = 0;
+    
     public int solution(int k, int[][] dungeons) {
-        int n = dungeons.length;
-        visited = new boolean[n];
-
-        DFS(k, 0, n, dungeons);
-        
-        return max;
+        visited = new boolean[dungeons.length];
+        dfs(0, k, dungeons);
+        return result;
     }
     
-    static void DFS(int curDegree, int depth, int n, int[][] dungeons) {
-        max = Math.max(max, depth);
+    static void dfs(int count, int point, int[][] dungeons) {
+        result = Math.max(result, count);
         
-        for (int i = 0; i < n; i++) {        
-            int minReqDegree = dungeons[i][0];
-            int reqDegree = dungeons[i][1];
+        // 수행 작업
+        for (int i = 0; i < dungeons.length; i++) {
+            int requiredPoint = dungeons[i][0];
+            int consumedPoint = dungeons[i][1];
             
-            if (!visited[i] && curDegree >= minReqDegree) {
+            if (!visited[i] && point >= requiredPoint) {
                 visited[i] = true;
-                DFS(curDegree - reqDegree, depth + 1, n, dungeons);
+                dfs(count + 1, point - consumedPoint, dungeons);
                 visited[i] = false;
             }
         }
