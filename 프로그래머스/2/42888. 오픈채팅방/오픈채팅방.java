@@ -3,31 +3,39 @@ import java.util.*;
 class Solution {
     public String[] solution(String[] record) {
         Map<String, String> nicknameMap = new HashMap<>();
-        List<String[]> logs = new ArrayList<>();
+        List<String[]> messages = new ArrayList<>();
 
-        for (String r : record) {
-            String[] split = r.split(" ");
+        // 1. 명령을 처리하면서 최종 닉네임 저장
+        for (String str : record) {
+            StringTokenizer st = new StringTokenizer(str);
 
-            String command = split[0];
-            String uid = split[1];
+            String command = st.nextToken();
+            String userId = st.nextToken();
 
             if (command.equals("Enter")) {
-                nicknameMap.put(uid, split[2]);
-                logs.add(new String[]{uid, "님이 들어왔습니다."});
+                String nickname = st.nextToken();
+
+                nicknameMap.put(userId, nickname);
+                messages.add(new String[]{userId, "님이 들어왔습니다."});
+
             } else if (command.equals("Leave")) {
-                logs.add(new String[]{uid, "님이 나갔습니다."});
+                messages.add(new String[]{userId, "님이 나갔습니다."});
+
             } else if (command.equals("Change")) {
-                nicknameMap.put(uid, split[2]);
+                String nickname = st.nextToken();
+
+                nicknameMap.put(userId, nickname);
             }
         }
 
-        String[] result = new String[logs.size()];
+        // 2. 최종 닉네임을 이용해 메시지 구성
+        String[] result = new String[messages.size()];
 
-        for (int i = 0; i < logs.size(); i++) {
-            String uid = logs.get(i)[0];
-            String message = logs.get(i)[1];
+        for (int i = 0; i < messages.size(); i++) {
+            String userId = messages.get(i)[0];
+            String message = messages.get(i)[1];
 
-            result[i] = nicknameMap.get(uid) + message;
+            result[i] = nicknameMap.get(userId) + message;
         }
 
         return result;
