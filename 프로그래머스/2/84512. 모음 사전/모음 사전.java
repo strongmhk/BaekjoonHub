@@ -1,30 +1,31 @@
 import java.util.*;
 
 class Solution {
-    static ArrayList<String> list = new ArrayList<>();
-    static String[] arr = {"A", "E", "I", "O", "U"};
-
+    static List<String> wordList;
+    static String[] words = {"A", "E", "I", "O", "U"};
+    
     public int solution(String word) {
         int answer = 0;
+        wordList = new ArrayList<>();
+        dfs("", 0);
         
-        DFS("", 0);
-        
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).equals(word)) {
-	            answer = i;
-	            break;
+        for (int i = 0; i < wordList.size(); i++) {
+            if (wordList.get(i).equals(word)) {
+                answer = i;
+                break;
             }
         }
         
         return answer;
     }
     
-    static void DFS(String w, int length) {
-        list.add(w);
+    // 모든 단어 생성
+    static void dfs(String str, int length) {
+        wordList.add(str);
         if (length == 5) return;
         
         for (int i = 0; i < 5; i++) {
-            DFS(w + arr[i], length + 1);
+            dfs(str + words[i], length + 1);
         }
     }
 }
